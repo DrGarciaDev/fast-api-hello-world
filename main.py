@@ -21,16 +21,28 @@ class HairColor(Enum):
     red = "red"
 
 class Location(BaseModel):
-    city: str
-    state: str
-    conuntry: str
+    city: str = Field(example="Guadalajara")
+    state: str = Field(example="Jalisco")
+    conuntry: str = Field(example="México")
 
 class Person(BaseModel):
-    first_name: str = Field(..., min_length=1, max_length=50)
-    last_name: str = Field(..., min_length=1, max_length=50)
-    age: int = Field(..., gt=0, le=100)
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
+    first_name: str = Field(..., min_length=1, max_length=50, example="Luis")
+    last_name: str = Field(..., min_length=1, max_length=50, example="Garcia")
+    age: int = Field(..., gt=0, le=100, example=21)
+    hair_color: Optional[HairColor] = Field(default=None, example="black")
+    is_married: Optional[bool] = Field(default=None, example=False)
+
+    # UTILIZANDO ESTA SUBCLASE SE PUEDE CREAR LOS EJEMPLOS QUE TENDRÁ LA DOCUMENTACIÓN SWAGGER
+    # class Config:
+    #     schema_extra = {
+    #         "example": {
+    #             "first_name": "Luis",
+    #             "last_name": "Garcia",
+    #             "age": 21,
+    #             "hair_color": "black",
+    #             "is_married": False
+    #         }
+    #     }
 
 
 @app.get("/")
