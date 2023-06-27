@@ -25,12 +25,14 @@ class Location(BaseModel):
     state: str = Field(example="Jalisco")
     conuntry: str = Field(example="México")
 
-class Person(BaseModel):
+class PersonBase(BaseModel):
     first_name: str = Field(..., min_length=1, max_length=50, example="Luis")
     last_name: str = Field(..., min_length=1, max_length=50, example="Garcia")
     age: int = Field(..., gt=0, le=100, example=21)
     hair_color: Optional[HairColor] = Field(default=None, example="black")
     is_married: Optional[bool] = Field(default=None, example=False)
+
+class Person(PersonBase):
     password: str = Field(..., min_length=8, example="12345678")
 
     # UTILIZANDO ESTA SUBCLASE SE PUEDE CREAR LOS EJEMPLOS QUE TENDRÁ LA DOCUMENTACIÓN SWAGGER
@@ -45,12 +47,8 @@ class Person(BaseModel):
     #         }
     #     }
 
-class PersonOut(BaseModel):
-    first_name: str = Field(..., min_length=1, max_length=50, example="Luis")
-    last_name: str = Field(..., min_length=1, max_length=50, example="Garcia")
-    age: int = Field(..., gt=0, le=100, example=21)
-    hair_color: Optional[HairColor] = Field(default=None, example="black")
-    is_married: Optional[bool] = Field(default=None, example=False)
+class PersonOut(PersonBase):
+    pass
 
 @app.get("/")
 def home():
