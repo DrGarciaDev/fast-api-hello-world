@@ -31,7 +31,6 @@ class Person(BaseModel):
     age: int = Field(..., gt=0, le=100, example=21)
     hair_color: Optional[HairColor] = Field(default=None, example="black")
     is_married: Optional[bool] = Field(default=None, example=False)
-    password: str = Field(..., min_length=8, example="12345678")
 
     # UTILIZANDO ESTA SUBCLASE SE PUEDE CREAR LOS EJEMPLOS QUE TENDRÁ LA DOCUMENTACIÓN SWAGGER
     # class Config:
@@ -45,12 +44,6 @@ class Person(BaseModel):
     #         }
     #     }
 
-class PersonOut(BaseModel):
-    first_name: str = Field(..., min_length=1, max_length=50, example="Luis")
-    last_name: str = Field(..., min_length=1, max_length=50, example="Garcia")
-    age: int = Field(..., gt=0, le=100, example=21)
-    hair_color: Optional[HairColor] = Field(default=None, example="black")
-    is_married: Optional[bool] = Field(default=None, example=False)
 
 @app.get("/")
 def home():
@@ -58,7 +51,7 @@ def home():
 
 # Request and Response Body
 
-@app.post("/person/new", response_model=PersonOut)
+@app.post("/person/new")
 def create_person(person: Person = Body(...)):
     return person
 
