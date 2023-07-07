@@ -57,19 +57,19 @@ class LoginOut(BaseModel):
     username: str = Field(..., max_length=20, example="miguel2021")
     message: str = Field(default="Login Succesfully!")
 
-@app.get(path="/", status_code=status.HTTP_200_OK)
+@app.get(path="/", status_code=status.HTTP_200_OK, tags=["Home"])
 def home():
     return {"hello": "world"}
 
 # Request and Response Body
 
-@app.post(path="/person/new", response_model=PersonOut, status_code=status.HTTP_201_CREATED)
+@app.post(path="/person/new", response_model=PersonOut, status_code=status.HTTP_201_CREATED, tags=["Persons"])
 def create_person(person: Person = Body(...)):
     return person
 
 # Validaciones Query parameter
 
-@app.get(path="/person/detail", status_code=status.HTTP_200_OK)
+@app.get(path="/person/detail", status_code=status.HTTP_200_OK, tags=["Persons"])
 def show_person(
         name: Optional[str] = Query(None, min_length=1, max_length=50, title="Person Name", description="It's between 1 and 50 characters", example="Luis"), 
         age: str = Query(..., title="Person Age", description="Required", example=25)
@@ -80,7 +80,7 @@ def show_person(
 
 persons = [1,2,3,4,5]
 
-@app.get(path="/person/detail/{person_id}", status_code=status.HTTP_200_OK)
+@app.get(path="/person/detail/{person_id}", status_code=status.HTTP_200_OK, tags=["Persons"])
 def show_person(person_id: int = Path(..., gt=0, title="Person Id", description="Person identifier", example=123)):
     if person_id not in persons:
         raise HTTPException(
@@ -91,7 +91,7 @@ def show_person(person_id: int = Path(..., gt=0, title="Person Id", description=
 
 # Validaciones Request Body 
 
-@app.put(path="/person/{person_id}", status_code=status.HTTP_200_OK)
+@app.put(path="/person/{person_id}", status_code=status.HTTP_200_OK, tags=["Persons"])
 def update_person(
         person_id: int = Path(..., title="Peson Id", description="This is the person Id", gt=0, example=123),
         person: Person = Body(...),
@@ -104,13 +104,13 @@ def update_person(
 
 # forms 
 
-@app.post(path="/login", response_model=LoginOut, status_code=status.HTTP_200_OK)
+@app.post(path="/login", response_model=LoginOut, status_code=status.HTTP_200_OK, tags=["Persons"])
 def login(username: str = Form(...), password: str = Form(...)):
     return LoginOut(username=username)
 
 # Cookies and Headers parameters
 
-@app.post(path="/contact", status_code=status.HTTP_200_OK)
+@app.post(path="/contact", status_code=status.HTTP_200_OK, tags=["About"])
 def contact(
     first_name: str = Form(..., max_length=20, min_length=1), 
     last_name: str = Form(..., max_length=20, min_length=1), 
@@ -123,7 +123,7 @@ def contact(
 
 # files 
 
-@app.post(path="/post-image")
+@app.post(path="/post-image", tags=["Files"])
 def post_image(
     image: UploadFile = File(...)
 ):
